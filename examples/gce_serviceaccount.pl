@@ -7,12 +7,14 @@ use Docker::Registry::Auth::GCEServiceAccount;
 my $sa = Docker::Registry::Auth::GCEServiceAccount->new();
 
 my $r = Docker::Registry::GCE->new(
-  project_id => 'project_id',
   auth => $sa_auth,
 );
 
 $r->caller->debug(1);
 
-print Dumper($r->repositories);
+my $repos = $r->repositories;
+print Dumper($repos);
 
-print Dumper($r->repository_tags(repository => 'repo'));
+foreach my $repo (@{ $repos->repositories }) {
+  print Dumper($r->repository_tags(repository => $repo));
+}
