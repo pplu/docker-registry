@@ -45,6 +45,12 @@ package Docker::Registry::Exception::Unauthorized;
   use Moose;
   extends 'Docker::Registry::Exception::HTTP';
 
+package Docker::Registry::Exception::FromRemote;
+  use Moose;
+  extends 'Docker::Registry::Exception::HTTP';
+
+  has code => (is => 'ro', isa => 'Str', required => 1);
+
 package Docker::Registry::Call::Repositories;
   use Moose;
   has n => (is => 'ro', isa => 'Int');
