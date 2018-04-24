@@ -4,6 +4,7 @@ requires 'HTTP::Tiny';
 requires 'HTTP::Headers';
 requires 'Throwable::Error';
 requires 'IO::Socket::SSL';
+requires 'Paws';
 
 requires 'Crypt::JWT';
 requires 'Path::Class';
