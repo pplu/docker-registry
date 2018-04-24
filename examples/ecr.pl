@@ -1,6 +1,7 @@
 #!/usr/bin/env perl
 
 use Data::Dumper;
+use Docker::Registry::V2;
 use Docker::Registry::ECR;
 use Docker::Registry::Auth::ECR;
 
