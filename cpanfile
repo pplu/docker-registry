@@ -7,3 +7,10 @@ requires 'IO::Socket::SSL';
 
 requires 'Crypt::JWT';
 requires 'Path::Class';
+
+on develop => sub {
+  requires 'Dist::Zilla';
+  requires 'Dist::Zilla::Plugin::Prereqs::FromCPANfile';
+  requires 'Dist::Zilla::Plugin::VersionFromModule';
+  requires 'Dist::Zilla::PluginBundle::Git';
+};
