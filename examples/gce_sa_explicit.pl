@@ -2,15 +2,21 @@
 
 use strict;
 use warnings;
+
 use Data::Dumper;
 use Docker::Registry::GCE;
 use Docker::Registry::Auth::GCEServiceAccount;
 
+my $ce = $ENV{ CLIENT_EMAIL } // die "Please set ENV CLIENT_EMAIL";
+my $pk = $ENV{ PRIVATE_KEY } // die "Please set ENV PRIVATE_KEY";
 #passing a repo is because sometimes your credentials don't let you list
 #the repositories, but you can see the tags of a repo if you know its name
 my $repo = $ARGV[0];
 
-my $sa = Docker::Registry::Auth::GCEServiceAccount->new();
+my $sa = Docker::Registry::Auth::GCEServiceAccount->new(
+  client_email => $ce,
+  private_key => $pk,
+);
 
 my $r = Docker::Registry::GCE->new(
   auth => $sa,
