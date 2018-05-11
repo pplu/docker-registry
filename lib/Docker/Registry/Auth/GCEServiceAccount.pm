@@ -23,7 +23,7 @@ package Docker::Registry::Auth::GCEServiceAccount;
     my $self = shift;
     my $value = $self->service_account->{ client_email };
     Docker::Registry::Auth::Exception->throw({
-      message => "private_key entry not found in service_account information",
+      message => "client_email entry not found in service_account information",
     }) if (not defined $value);
     return $value;
   });
