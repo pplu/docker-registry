@@ -4,10 +4,15 @@ requires 'HTTP::Tiny';
 requires 'HTTP::Headers';
 requires 'Throwable::Error';
 requires 'IO::Socket::SSL';
-requires 'Paws';
 
-requires 'Crypt::JWT';
-requires 'Path::Class';
+feature 'gcr-registry', 'Support for GCR' => sub {
+  requires 'Crypt::JWT';
+  requires 'Path::Class';
+};
+
+feature 'ecr-registry', 'Support for ECR' => sub {
+  requires 'Paws';
+};
 
 on develop => sub {
   requires 'Dist::Zilla';
