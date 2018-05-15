@@ -35,7 +35,8 @@ This set of modules helps manage that for you.
 
 =head1 WARNING
 
-Consider this code Beta quality. Some 
+Consider this code Alpha quality. It works, but only some read-only methods have been implemented, and the API
+may still change. Be careful if you start depending on this module.
 
 =head1 METHODS
 
