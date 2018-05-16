@@ -2,8 +2,6 @@ package Docker::Registry::ECR;
   use Moose;
   extends 'Docker::Registry::V2';
 
-  use Docker::Registry::Auth::ECR;
-
   has '+url' => (lazy => 1, default => sub {
     my $self = shift;
     die "Must specify account_id and region in constructor" if (not defined $self->account_id or
@@ -13,6 +11,7 @@ package Docker::Registry::ECR;
 
   has '+auth' => (lazy => 1, default => sub {
     my $self = shift;
+    require Docker::Registry::Auth::ECR;
     Docker::Registry::Auth::ECR->new(region => $self->region);
   });
 
