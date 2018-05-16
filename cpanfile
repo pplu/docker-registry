@@ -1,3 +1,4 @@
+requires 'perl' => '5.014001';
 requires 'Moose';
 requires 'JSON::MaybeXS';
 requires 'HTTP::Tiny';
