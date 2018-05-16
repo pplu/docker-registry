@@ -14,6 +14,11 @@ feature 'ecr-registry', 'Support for ECR' => sub {
   requires 'Paws';
 };
 
+on test => sub {
+  requires 'Test::More';
+  requires 'Test::Exception';
+};
+
 on develop => sub {
   requires 'Dist::Zilla';
   requires 'Dist::Zilla::Plugin::Prereqs::FromCPANfile';
