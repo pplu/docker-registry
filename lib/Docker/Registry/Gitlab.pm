@@ -39,18 +39,16 @@ has 'repo' => (
     predicate => 'has_repo',
 );
 
-has '+auth' => (
-    lazy    => 1,
-    default => sub {
-        my $self = shift;
-        return Docker::Registry::Auth::Gitlab->new(
-            username     => $self->username,
-            access_token => $self->access_token,
-            $self->has_jwt  ? (jwt  => $self->jwt)  : (),
-            $self->has_repo ? (repo => $self->repo) : (),
-        );
-    },
-);
+override build_auth => sub {
+    my $self = shift;
+    require Docker::Registry::Auth::Gitlab;
+    return Docker::Registry::Auth::Gitlab->new(
+        username     => $self->username,
+        access_token => $self->access_token,
+        $self->has_jwt  ? (jwt  => $self->jwt)  : (),
+        $self->has_repo ? (repo => $self->repo) : (),
+    );
+};
 
 around 'repositories' => sub {
     my $orig = shift;
