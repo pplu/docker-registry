@@ -5,6 +5,7 @@ requires 'HTTP::Tiny';
 requires 'HTTP::Headers';
 requires 'Throwable::Error';
 requires 'IO::Socket::SSL';
+requires 'MooseX::Types::Moose';
 
 feature 'gcr-registry', 'Support for GCR' => sub {
   requires 'Crypt::JWT';
@@ -12,13 +13,17 @@ feature 'gcr-registry', 'Support for GCR' => sub {
   requires 'URI';
 };
 
-feature 'ecr-registry', 'Support for ECR' => sub {
+feature 'ecr-registry', 'support for ecr' => sub {
   requires 'Paws';
+};
+
+feature 'gitlab-registry', 'support for gitlab' => sub {
 };
 
 on test => sub {
   requires 'Test::More';
   requires 'Test::Exception';
+  requires 'Sub::Override';
 };
 
 on develop => sub {
