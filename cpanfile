@@ -31,4 +31,5 @@ on develop => sub {
   requires 'Dist::Zilla::Plugin::Prereqs::FromCPANfile';
   requires 'Dist::Zilla::Plugin::VersionFromModule';
   requires 'Dist::Zilla::PluginBundle::Git';
+  requires 'Dist::Zilla::Plugin::CopyFilesFromBuild::Filtered';
 };
