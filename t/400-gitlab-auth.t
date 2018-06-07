@@ -65,11 +65,12 @@ use Docker::Registry::Auth::Gitlab;
 
 SKIP: {
 
-    note "Live test, set GITLAB_USERNAME, GITLAB_access_token to run this"
-        . " test. Optionally set GITLAB_JWT if you want to test against a"
-        . " self-hosted server. GITLAB_REPO can also be set.";
+    my $msg = "Live test, set GITLAB_USERNAME, GITLAB_TOKEN to run this"
+    . " test. Optionally set GITLAB_JWT if you want to test against a"
+    . " self-hosted server. GITLAB_REPO can also be set.";
 
-    skip "LIVE tests", 1 unless grep { /^GITLAB_/ } keys %ENV;
+    skip($msg, 1) unless grep { /^GITLAB_/ } keys %ENV;
+    note "Running live tests";
 
     my $auth = Docker::Registry::Auth::Gitlab->new(
         username     => $ENV{GITLAB_USERNAME},
