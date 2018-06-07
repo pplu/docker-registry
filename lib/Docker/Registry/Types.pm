@@ -15,7 +15,7 @@ use MooseX::Types -declare => [
 class_type DockerRegistryURI, {class => 'URI' };
 coerce DockerRegistryURI, from Str, via { return URI->new($_); };
 
-__PACKAGE__->meta->make_immutable;
+1;
 
 __END__
 
