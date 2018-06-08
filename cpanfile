@@ -21,9 +21,9 @@ feature 'gitlab-registry', 'support for gitlab' => sub {
 };
 
 on test => sub {
-  requires 'Test::More';
-  requires 'Test::Exception';
+  requires 'Test::Most';
   requires 'Sub::Override';
+  requires 'Import::Into';
 };
 
 on develop => sub {
