@@ -69,7 +69,7 @@ SKIP: {
         . " test. Optionally set GITLAB_JWT if you want to test against a"
         . " self-hosted server. GITLAB_REPO can also be set.";
 
-    skip "LIVE tests" unless grep { /^GITLAB_/ } keys %ENV;
+    skip "LIVE tests", 1 unless grep { /^GITLAB_/ } keys %ENV;
 
     my $auth = Docker::Registry::Auth::Gitlab->new(
         username     => $ENV{GITLAB_USERNAME},
