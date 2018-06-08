@@ -144,9 +144,9 @@ The token received from gitlab.
 
 =head2 authorize
 
-Implements the method as required by C<Docker::Registry::Auth>. Add the
+Implements the method as required by L<Docker::Registry::Auth>. Add the
 "Authorization" header to the request with the "Bearer" token.
 
 =head2 SEE ALSO
 
-C<Docker::Registry::Auth>, C<Docker::Registery::Types> and C<Docker::Registry::Gitlab>.
+L<Docker::Registry::Auth>, L<Docker::Registery::Types> and L<Docker::Registry::Gitlab>.
