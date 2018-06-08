@@ -9,6 +9,7 @@ requires 'IO::Socket::SSL';
 feature 'gcr-registry', 'Support for GCR' => sub {
   requires 'Crypt::JWT';
   requires 'Path::Class';
+  requires 'URI';
 };
 
 feature 'ecr-registry', 'Support for ECR' => sub {
