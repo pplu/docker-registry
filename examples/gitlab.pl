@@ -7,8 +7,8 @@ use Docker::Registry::Auth::Gitlab;
 my $repo = $ARGV[0];
 
 my $r = Docker::Registry::Gitlab->new(
-    username => 'username',
-    password => 'personaltoken',
+    username     => 'username',
+    access_token => 'personaltoken',
     defined $repo ? (repo => $repo) : (),
 );
 
