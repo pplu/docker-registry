@@ -14,7 +14,7 @@ feature 'gcr-registry', 'Support for GCR' => sub {
 };
 
 feature 'ecr-registry', 'support for ecr' => sub {
-  requires 'paws';
+  requires 'Paws';
 };
 
 feature 'gitlab-registry', 'support for gitlab' => sub {
