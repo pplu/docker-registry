@@ -6,9 +6,12 @@ use Docker::Registry::Auth::Gitlab;
 
 my $repo = $ARGV[0];
 
+my $username = $ENV{ GITLAB_USERNAME } // die "Please set ENV GITLAB_USERNAME";
+my $personal_token = $ENV{ GITLAB_TOKEN } // die "Please set ENV GITLAB_TOKEN";
+
 my $r = Docker::Registry::Gitlab->new(
-    username => 'username',
-    password => 'personaltoken',
+    username => $username,
+    password => $personal_token,
     defined $repo ? (repo => $repo) : (),
 );
 
