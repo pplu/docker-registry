@@ -25,7 +25,7 @@ on test => sub {
   requires 'Test::Most';
   requires 'Test::Exception';
   requires 'Sub::Override';
-  requires 'Import::Into';
+  requires 'Import::Into' => '1.002003';
 };
 
 on develop => sub {
