@@ -11,7 +11,7 @@ my $personal_token = $ENV{ GITLAB_TOKEN } // die "Please set ENV GITLAB_TOKEN";
 
 my $r = Docker::Registry::Gitlab->new(
     username => $username,
-    password => $personal_token,
+    access_token => $personal_token,
     defined $repo ? (repo => $repo) : (),
 );
 

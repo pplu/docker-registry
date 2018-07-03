@@ -10,20 +10,13 @@ use Docker::Registry::Types qw(DockerRegistryURI);
 use HTTP::Tiny;
 use JSON::MaybeXS qw(decode_json);
 
-has token => (
-    is       => 'ro',
-    isa      => 'Str',
-    lazy     => 1,
-    builder => 'get_token',
-);
-
 has username => (
     is       => 'ro',
     isa      => 'Str',
     required => 1,
 );
 
-has password => (
+has access_token => (
     is       => 'ro',
     isa      => 'Str',
     required => 1,
@@ -40,6 +33,13 @@ has repo => (
     is        => 'ro',
     isa       => 'Str',
     predicate => 'has_repo',
+);
+
+has bearer_token => (
+    is       => 'ro',
+    isa      => 'Str',
+    lazy     => 1,
+    builder => 'get_bearer_token',
 );
 
 sub _build_scope {
@@ -65,11 +65,11 @@ sub _build_token_uri {
         offline_token => 'true',
     );
 
-    $uri->userinfo(join(':', $self->username, $self->password));
+    $uri->userinfo(join(':', $self->username, $self->access_token));
     return $uri;
 }
 
-sub get_token {
+sub get_bearer_token {
     my $self = shift;
 
     my $uri = $self->_build_token_uri;
@@ -87,7 +87,7 @@ sub get_token {
 sub authorize {
     my ($self, $request) = @_;
 
-    $request->header('Authorization', 'Bearer ' . $self->token);
+    $request->header('Authorization', 'Bearer ' . $self->bearer_token);
     $request->header('Accept',
         'application/vnd.docker.distribution.manifest.v2+json');
 
@@ -109,7 +109,7 @@ Authenticate against gitlab registry
 
     my $auth = Docker::Registry::Auth::Gitlab->new(
         username => 'foo',
-        password => 'bar',
+        access_token => 'bar',
     );
 
     my $req = $auth->authorize(HTTP::Request->new('GET', 'https://foo.bar.nl'));
@@ -121,7 +121,7 @@ Authenticate against gitlab registry
 
 Your username at gitlab.
 
-=head2 password
+=head2 access_token
 
 The access token you get from
 L<gitlab|https://gitlab.com/profile/personal_access_tokens> with
@@ -136,11 +136,11 @@ The repository you request access to.
 The endpoint to request the JWT token from, defaults to
 'https://gitlab.com/jwt/auth'. You can use a 'Str' or an URI object.
 
-=head2 token
-
-The token received from gitlab.
-
 =head1 METHODS
+
+=head2 get_bearer_token
+
+The builder of the C<bearer_token> attribute.
 
 =head2 authorize
 

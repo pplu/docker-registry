@@ -21,7 +21,7 @@ has 'username' => (
     required => 1,
 );
 
-has 'password' => (
+has 'access_token' => (
     is       => 'ro',
     isa      => 'Str',
     required => 1,
@@ -39,18 +39,16 @@ has 'repo' => (
     predicate => 'has_repo',
 );
 
-has '+auth' => (
-    lazy    => 1,
-    default => sub {
-        my $self = shift;
-        return Docker::Registry::Auth::Gitlab->new(
-            username => $self->username,
-            password => $self->password,
-            $self->has_jwt ? ( jwt => $self->jwt ) : (),
-            $self->has_repo ? ( repo => $self->repo ) : (),
-        );
-    },
-);
+override build_auth => sub {
+    my $self = shift;
+    require Docker::Registry::Auth::Gitlab;
+    return Docker::Registry::Auth::Gitlab->new(
+        username     => $self->username,
+        access_token => $self->access_token,
+        $self->has_jwt  ? (jwt  => $self->jwt)  : (),
+        $self->has_repo ? (repo => $self->repo) : (),
+    );
+};
 
 around 'repositories' => sub {
   die "_catalog operation is not supported by GitLab provider";
@@ -69,7 +67,7 @@ Connect and do things with the gitlab registry
     use Docker::Registry::Gitlab;
     my $registry = Docker::Registry::Gitlab->new(
         username => 'foo',
-        password => 'bar', # your private token at gitlab
+        access_token => 'bar', # your private token at gitlab
     );
 
 =head1 ATTRIBUTES
@@ -82,7 +80,7 @@ The endpoint of the registry, defaults to 'https://registry.gitlab.com'.
 
 Your username at gitlab
 
-=head2 password
+=head2 access_token
 
 The access token you get from
 L<gitlab|https://gitlab.com/profile/personal_access_tokens> with

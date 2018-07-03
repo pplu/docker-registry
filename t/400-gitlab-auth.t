@@ -12,8 +12,8 @@ use Docker::Registry::Auth::Gitlab;
 
 {
     my $auth = Docker::Registry::Auth::Gitlab->new(
-        username => 'foo',
-        password => 'bar',
+        username     => 'foo',
+        access_token => 'bar',
     );
 
     my $jwt = $auth->jwt;
@@ -33,7 +33,7 @@ use Docker::Registry::Auth::Gitlab;
     }
 
     my $uri = $auth->_build_token_uri;
-    isa_ok($uri, 'URI', ".. and we have a token URI");
+    isa_ok($uri, 'URI', ".. and we have a access_token URI");
     is($uri->host,     'gitlab.com', ".. with the correct hostname");
     is($uri->userinfo, 'foo:bar',    ".. and the correct login details");
 
@@ -42,12 +42,12 @@ use Docker::Registry::Auth::Gitlab;
         "HTTP::Tiny::get" => sub {
             return {
                 success => 1,
-                content => '{"token":"mysupersecrettoken"}',
+                content => '{"token":"mysupersecretaccess_token"}',
             };
         }
     );
 
-    is($auth->token, "mysupersecrettoken",
+    is($auth->bearer_token, "mysupersecretaccess_token",
         "Go the super secret token from gitlab!");
 
     my $req = HTTP::Request->new('GET', $uri);
@@ -56,7 +56,7 @@ use Docker::Registry::Auth::Gitlab;
     isa_ok($req, "HTTP::Request", "->authorize works too");
     is(
         $req->headers->header("authorization"),
-        "Bearer mysupersecrettoken",
+        "Bearer mysupersecretaccess_token",
         ".. with the correct header"
     );
 
@@ -65,20 +65,21 @@ use Docker::Registry::Auth::Gitlab;
 
 SKIP: {
 
-    note "Live test, set GITLAB_USERNAME, GITLAB_TOKEN to run this"
+    my $msg = "Live test, set GITLAB_USERNAME, GITLAB_TOKEN to run this"
     . " test. Optionally set GITLAB_JWT if you want to test against a"
     . " self-hosted server. GITLAB_REPO can also be set.";
 
-    skip "LIVE tests", 1 unless grep { /^GITLAB_/ } keys %ENV;
+    skip($msg, 1) unless grep { /^GITLAB_/ } keys %ENV;
+    note "Running live tests";
 
     my $auth = Docker::Registry::Auth::Gitlab->new(
-        username => $ENV{GITLAB_USERNAME},
-        password => $ENV{GITLAB_TOKEN},
+        username     => $ENV{GITLAB_USERNAME},
+        access_token => $ENV{GITLAB_TOKEN},
         $ENV{GITLAB_JWT}  ? (jwt  => $ENV{GITLAB_JWT})  : (),
         $ENV{GITLAB_REPO} ? (repo => $ENV{GITLAB_REPO}) : (),
     );
 
-    my $token = $auth->token;
+    my $token = $auth->bearer_token;
     isnt($token, undef, "We got '$token' from gitlab");
 
 }
