@@ -53,15 +53,7 @@ has '+auth' => (
 );
 
 around 'repositories' => sub {
-    my $orig = shift;
-    my $self = shift;
-
-    if ($ENV{GITLAB_SCOPE}) {
-        $self->$orig(@_);
-    }
-    else {
-        ...;
-    }
+  die "_catalog operation is not supported by GitLab provider";
 };
 
 __PACKAGE__->meta->make_immutable;
