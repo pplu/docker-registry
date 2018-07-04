@@ -7,9 +7,6 @@ use warnings;
 use namespace::autoclean ();
 
 use Import::Into;
-use Test::Fatal;
-use Test::Most;
-use Sub::Override;
 
 sub import {
 
@@ -23,8 +20,8 @@ sub import {
 
     my @imports = qw(
         namespace::autoclean
-        Test::Fatal
         Test::Docker::Registry::Util
+        Sub::Override
     );
 
     $_->import::into($caller_level) for @imports;
