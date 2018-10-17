@@ -1,10 +1,9 @@
 package Docker::Registry::Request;
   use Moo;
-  #use Types::Standard qw/Str ClassName Maybe/;
-  use Types::Standard qw/Str Maybe/;
+  use Types::Standard qw/Str Maybe InstanceOf/;
+  use HTTP::Headers;
 
-  #has headers => (is => 'ro', isa => ClassName['HTTP::Headers'], default => sub { HTTP::Headers->new });
-  has headers => (is => 'ro', default => sub { HTTP::Headers->new });
+  has headers => (is => 'ro', isa => InstanceOf['HTTP::Headers'], default => sub { HTTP::Headers->new });
   has method => (is => 'ro', isa => Str, required => 1);
   has url => (is => 'ro', isa => Str, required => 1);
   has content => (is => 'ro', isa => Maybe[Str]);
