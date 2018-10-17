@@ -67,9 +67,11 @@ Returns a L<Docker::Registry::Result::RepositoryTags> object with the list of ta
 Different cloud providers of Docker registries have subtle differences between them,
 so there are specialized classes for each supported provider:
 
-L<Docker::Registry::GCE>
+L<Docker::Registry::Azure>
 
 L<Docker::Registry::ECR>
+
+L<Docker::Registry::GCE>
 
 L<Docker::Registry::Gitlab>
 
@@ -79,9 +81,9 @@ Each registry class has it's authentication providers:
 
 L<Docker::Registry::Auth::Basic>
 
-L<Docker::Registry::Auth::GCEServiceAccount>
-
 L<Docker::Registry::Auth::ECR>
+
+L<Docker::Registry::Auth::GCEServiceAccount>
 
 L<Docker::Registry::Auth::Gitlab>
 
