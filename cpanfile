@@ -6,6 +6,7 @@ requires 'HTTP::Headers';
 requires 'Throwable::Error';
 requires 'IO::Socket::SSL';
 requires 'MooseX::Types::Moose';
+requires 'MIME::Base64';
 
 feature 'gcr-registry', 'Support for GCR' => sub {
   requires 'Crypt::JWT';

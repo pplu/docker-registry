@@ -77,6 +77,8 @@ L<Docker::Registry::Gitlab>
 
 Each registry class has it's authentication providers:
 
+L<Docker::Registry::Auth::Basic>
+
 L<Docker::Registry::Auth::GCEServiceAccount>
 
 L<Docker::Registry::Auth::ECR>
