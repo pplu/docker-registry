@@ -2,4 +2,4 @@ local/
 cpanfile.snapshot
 /Docker-Registry-*.tar.gz
 /Docker-Registry-*/
-/Makefile
+dzil-local/

@@ -29,10 +29,3 @@ on test => sub {
   requires 'Import::Into' => '1.002003';
 };
 
-on develop => sub {
-  requires 'Dist::Zilla';
-  requires 'Dist::Zilla::Plugin::Prereqs::FromCPANfile';
-  requires 'Dist::Zilla::Plugin::VersionFromModule';
-  requires 'Dist::Zilla::PluginBundle::Git';
-  requires 'Dist::Zilla::Plugin::CopyFilesFromBuild::Filtered';
-};
