@@ -1,5 +1,6 @@
 package Docker::Registry::Auth::Gitlab;
-use Moose;
+use Moo;
+use Types::Standard qw/Str/;
 use namespace::autoclean;
 
 # ABSTRACT: Authentication module for gitlab registry
@@ -12,13 +13,13 @@ use JSON::MaybeXS qw(decode_json);
 
 has username => (
     is       => 'ro',
-    isa      => 'Str',
+    isa      => Str,
     required => 1,
 );
 
 has access_token => (
     is       => 'ro',
-    isa      => 'Str',
+    isa      => Str,
     required => 1,
 );
 
@@ -31,18 +32,18 @@ has jwt => (
 
 has repo => (
     is        => 'ro',
-    isa       => 'Str',
+    isa       => Str,
     predicate => 'has_repo',
 );
 
 has bearer_token => (
     is       => 'ro',
-    isa      => 'Str',
+    isa      => Str,
     lazy     => 1,
     builder => 'get_bearer_token',
 );
 
-sub _build_scope {
+sub scope {
     my $self = shift;
 
     if ($self->has_repo) {
@@ -53,14 +54,14 @@ sub _build_scope {
     }
 }
 
-sub _build_token_uri {
+sub token_uri {
     my $self = shift;
 
     my $uri = $self->jwt->clone;
 
     $uri->query_form(
         service       => 'container_registry',
-        scope         => $self->_build_scope,
+        scope         => $self->scope,
         client_id     => 'docker',
         offline_token => 'true',
     );
@@ -72,7 +73,7 @@ sub _build_token_uri {
 sub get_bearer_token {
     my $self = shift;
 
-    my $uri = $self->_build_token_uri;
+    my $uri = $self->token_uri;
 
     my $ua = HTTP::Tiny->new();
     my $res = $ua->get($uri);

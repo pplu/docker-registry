@@ -1,5 +1,6 @@
 package Docker::Registry::Gitlab;
-use Moose;
+use Moo;
+use Types::Standard qw/Str/;
 extends 'Docker::Registry::V2';
 use namespace::autoclean;
 
@@ -17,13 +18,13 @@ has '+url' => (
 
 has 'username' => (
     is       => 'ro',
-    isa      => 'Str',
+    isa      => Str,
     required => 1,
 );
 
 has 'access_token' => (
     is       => 'ro',
-    isa      => 'Str',
+    isa      => Str,
     required => 1,
 );
 
@@ -35,12 +36,12 @@ has 'jwt' => (
 
 has 'repo' => (
     is        => 'ro',
-    isa       => 'Str',
+    isa       => Str,
     predicate => 'has_repo',
 );
 
-override build_auth => sub {
-    my $self = shift;
+around build_auth => sub {
+    my ($orig, $self) = @_;
     require Docker::Registry::Auth::Gitlab;
     return Docker::Registry::Auth::Gitlab->new(
         username     => $self->username,
