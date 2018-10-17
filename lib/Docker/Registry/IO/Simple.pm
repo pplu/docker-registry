@@ -1,11 +1,12 @@
 package Docker::Registry::IO::Simple;
-  use Moose;
+  use Moo;
+  use Types::Standard qw/Bool/;
   with 'Docker::Registry::IO';
 
   use HTTP::Tiny;
   use Data::Dumper;
 
-  has debug => (is => 'rw', isa => 'Bool', default => 0);
+  has debug => (is => 'rw', isa => Bool, default => 0);
 
   has ua => (is => 'ro', default => sub {
     HTTP::Tiny->new(

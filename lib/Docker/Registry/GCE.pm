@@ -1,5 +1,5 @@
 package Docker::Registry::GCE;
-  use Moose;
+  use Moo;
   extends 'Docker::Registry::V2';
 
   has '+url' => (lazy => 1, default => sub {

@@ -19,20 +19,10 @@ use Docker::Registry::Auth::Gitlab;
     my $jwt = $auth->jwt;
     isa_ok($jwt, 'URI', "Got a JWT URI");
 
-    my $scope = $auth->_build_scope;
+    my $scope = $auth->scope;
     is($scope, 'registry:catalog:*', "scope is set to 'registry:catalog:*'");
 
-    {
-        # Cannot change the value, so bypass it :)
-        my $attr = $auth->meta->find_attribute_by_name('repo');
-        $attr->set_value($auth, 'foobar');
-
-        my $scope = $auth->_build_scope;
-        is($scope, 'repository:foobar:pull,push',
-            "scope is set to 'repository:foobar:pull,push'");
-    }
-
-    my $uri = $auth->_build_token_uri;
+    my $uri = $auth->token_uri;
     isa_ok($uri, 'URI', ".. and we have a access_token URI");
     is($uri->host,     'gitlab.com', ".. with the correct hostname");
     is($uri->userinfo, 'foo:bar',    ".. and the correct login details");
@@ -61,6 +51,20 @@ use Docker::Registry::Auth::Gitlab;
     );
 
     $override->restore;
+}
+
+{
+    my $auth = Docker::Registry::Auth::Gitlab->new(
+        username     => 'foo',
+        access_token => 'bar',
+        repo => 'foobar',
+    );
+
+    my $jwt = $auth->jwt;
+    isa_ok($jwt, 'URI', "Got a JWT URI");
+
+    my $scope = $auth->scope;
+    cmp_ok($scope, 'eq', 'repository:foobar:pull,push', "scope is set to 'repository:foobar:pull,push'");
 }
 
 SKIP: {
