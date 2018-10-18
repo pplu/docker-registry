@@ -34,12 +34,12 @@ sub _build_token_uri {
 
     my $uri = $self->jwt->clone;
 
-    $uri->query_form(
+    $uri->query_form({
         service       => 'container_registry',
         scope         => $scope,
         client_id     => 'docker',
         offline_token => 'true',
-    );
+    });
 
     $uri->userinfo(join(':', $self->username, $self->access_token));
     return $uri;
@@ -63,7 +63,7 @@ sub get_bearer_token {
 sub authorize {
     my ($self, $request, $scope) = @_;
 
-    my $bearer_token = $self->set_bearer_token($scope);
+    my $bearer_token = $self->get_bearer_token($scope);
 
     $request->header('Authorization', 'Bearer ' . $bearer_token);
     $request->header('Accept',
