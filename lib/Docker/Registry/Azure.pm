@@ -19,7 +19,9 @@ package Docker::Registry::Azure;
         password => $self->password,
       );
     } else {
-      die "Cannot authenticate";
+      # We're using Service Principal mode
+      require Docker::Registry::Auth::AzureServicePrincipal;
+      Docker::Registry::Auth::AzureServicePrincipal->new;
     }
   };
 
