@@ -104,9 +104,9 @@ Wesley Schwengle (waterkip) has implemented the GitLab provider, as well as refa
 
 =head1 BUGS and SOURCE
 
-The source code is located here: L<https://github.com/pplu/kubectl-cliwrapper>
+The source code is located here: L<https://github.com/pplu/docker-registry>
 
-Please report bugs to: L<https://github.com/pplu/kubectl-cliwrapper/issues>
+Please report bugs to: L<https://github.com/pplu/docker-registry/issues>
 
 =head1 COPYRIGHT and LICENSE
 
