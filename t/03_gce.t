@@ -10,7 +10,6 @@ my $auth = new_auth_none();
 my $io   = new_fake_io();
 
 my $d = Docker::Registry::GCE->new(
-    region     => 'fake',
     account_id => 'fake',
     caller     => $io,
     auth       => $auth,
@@ -34,6 +33,25 @@ my $d = Docker::Registry::GCE->new(
     isa_ok($result, 'Docker::Registry::Result::RepositoryTags');
     cmp_ok($result->name,      'eq', 'test2-registry');
     cmp_ok($result->tags->[0], 'eq', 'version1');
+}
+
+{
+  my $r = Docker::Registry::GCE->new(
+    account_id => 'fake',
+    caller     => $io,
+    auth       => $auth,
+  );
+  cmp_ok($r->url, 'eq', 'https://gcr.io');
+}
+
+{
+  my $r = Docker::Registry::GCE->new(
+    region     => 'eu',
+    account_id => 'fake',
+    caller     => $io,
+    auth       => $auth,
+  );
+  cmp_ok($r->url, 'eq', 'https://eu.gcr.io');
 }
 
 done_testing;
