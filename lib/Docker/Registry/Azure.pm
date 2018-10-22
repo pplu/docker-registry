@@ -1,5 +1,7 @@
 package Docker::Registry::Azure;
-  use Moose;
+  use Moo;
+  use Types::Standard qw/Str/;
+
   extends 'Docker::Registry::V2';
 
   has '+url' => (lazy => 1, default => sub {
@@ -8,8 +10,8 @@ package Docker::Registry::Azure;
     sprintf 'https://%s.azurecr.io', $self->name;
   });
 
-  override build_auth => sub {
-    my $self = shift;
+  around build_auth => sub {
+    my ($orig, $self) = @_;
     if (defined $self->password) {
       # We're using the "Admin Account" mode
       # https://docs.microsoft.com/en-us/azure/container-registry/container-registry-authentication#admin-account
@@ -25,7 +27,7 @@ package Docker::Registry::Azure;
     }
   };
 
-  has name => (is => 'ro', isa => 'Str');
-  has password => (is => 'ro', isa => 'Str');
+  has name => (is => 'ro', isa => Str);
+  has password => (is => 'ro', isa => Str);
 
 1;
