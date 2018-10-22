@@ -86,7 +86,8 @@ package Docker::Registry::V2;
       method => 'GET',
       url => (join '/', $self->url, $self->api_base, '_catalog')
     );
-    $request = $self->auth->authorize($request);
+    my $scope = 'registry:catalog:*';
+    $request = $self->auth->authorize($request, $scope);
     my $response = $self->caller->send_request($request);
     my $result_class = 'Docker::Registry::Result::Repositories';
     my $result = $result_class->new($self->process_json_response($response));
@@ -112,7 +113,8 @@ package Docker::Registry::V2;
       method => 'GET',
       url => (join '/', $self->url, $self->api_base, $call->repository, 'tags/list')
     );
-    $request = $self->auth->authorize($request);
+    my $scope = sprintf 'repository:%s:%s', $call->repository, 'pull';
+    $request = $self->auth->authorize($request, $scope);
     my $response = $self->caller->send_request($request);
     my $result_class = 'Docker::Registry::Result::RepositoryTags';
     my $result = $result_class->new($self->process_json_response($response));
