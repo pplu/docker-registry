@@ -1,3 +1,10 @@
+0.06 2018-10-??
+ - GCE receives a new attribute "region" to select the region where the registry
+   is hosted.
+ - New Azure Container Registry provider (ACR). Can authenticate with admin credentials
+   or Azure AD credentials.
+ - Internal refactor 
+
 0.05 2018-06-04
  - Require Import::Into 1.002003 to avoid some installation failures on 
    some systems http://matrix.cpantesters.org/?dist=Docker-Registry+0.04 (waterkip)
