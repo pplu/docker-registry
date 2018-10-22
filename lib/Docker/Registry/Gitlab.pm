@@ -47,7 +47,6 @@ around build_auth => sub {
         username     => $self->username,
         access_token => $self->access_token,
         $self->has_jwt  ? (jwt  => $self->jwt)  : (),
-        $self->has_repo ? (repo => $self->repo) : (),
     );
 };
 

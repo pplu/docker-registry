@@ -5,6 +5,7 @@ use warnings;
 
 use Test::More;
 use Test::Exception;
+use Test::Deep;
 use Sub::Override;
 use HTTP::Request;
 
@@ -19,13 +20,19 @@ use Docker::Registry::Auth::Gitlab;
     my $jwt = $auth->jwt;
     isa_ok($jwt, 'URI', "Got a JWT URI");
 
-    my $scope = $auth->scope;
-    is($scope, 'registry:catalog:*', "scope is set to 'registry:catalog:*'");
-
-    my $uri = $auth->token_uri;
+    my $uri = $auth->_build_token_uri('scope');
     isa_ok($uri, 'URI', ".. and we have a access_token URI");
     is($uri->host,     'gitlab.com', ".. with the correct hostname");
     is($uri->userinfo, 'foo:bar',    ".. and the correct login details");
+    my %query_params      = $uri->query_form;
+    my %want_query_params = (
+        service       => 'container_registry',
+        scope         => 'scope',
+        client_id     => 'docker',
+        offline_token => 'true',
+    );
+    cmp_deeply(\%query_params, \%want_query_params,
+        ".. with the correct query params");
 
     # Override HTTP::Tiny get so we don't need a network connection
     my $override = Sub::Override->new(
@@ -37,7 +44,7 @@ use Docker::Registry::Auth::Gitlab;
         }
     );
 
-    is($auth->bearer_token, "mysupersecretaccess_token",
+    is($auth->get_bearer_token, "mysupersecretaccess_token",
         "Go the super secret token from gitlab!");
 
     my $req = HTTP::Request->new('GET', $uri);
@@ -62,9 +69,6 @@ use Docker::Registry::Auth::Gitlab;
 
     my $jwt = $auth->jwt;
     isa_ok($jwt, 'URI', "Got a JWT URI");
-
-    my $scope = $auth->scope;
-    cmp_ok($scope, 'eq', 'repository:foobar:pull,push', "scope is set to 'repository:foobar:pull,push'");
 }
 
 SKIP: {
@@ -83,7 +87,7 @@ SKIP: {
         $ENV{GITLAB_REPO} ? (repo => $ENV{GITLAB_REPO}) : (),
     );
 
-    my $token = $auth->bearer_token;
+    my $token = $auth->get_bearer_token;
     isnt($token, undef, "We got '$token' from gitlab");
 
 }

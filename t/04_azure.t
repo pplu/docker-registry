@@ -4,16 +4,17 @@ use lib qw(t/lib);
 
 use Test::Docker::Registry;
 
-use Docker::Registry::GCE;
+use Docker::Registry::Azure;
 
-my $auth = new_auth_none();
 my $io   = new_fake_io();
 
-my $d = Docker::Registry::GCE->new(
-    account_id => 'fake',
+my $d = Docker::Registry::Azure->new(
+    name       => 'azure-repo',    
     caller     => $io,
-    auth       => $auth,
+    password => 'MyPass',
 );
+
+cmp_ok($d->url, 'eq', 'https://azure-repo.azurecr.io');
 
 {
     $io->set_content('{"repositories":["test2-registry","test1-registry"]}');
@@ -36,22 +37,21 @@ my $d = Docker::Registry::GCE->new(
 }
 
 {
-  my $r = Docker::Registry::GCE->new(
-    account_id => 'fake',
-    caller     => $io,
-    auth       => $auth,
-  );
-  cmp_ok($r->url, 'eq', 'https://gcr.io');
+    $io->set_status_code(400);
+    $io->set_content(
+        '<html><head><title>400 Bad Request</title></head><body bgcolor="white"><center><h1>400 Bad Request</h1></center><hr><center>nginx</center></body></html>'
+    );
+
+    throws_ok(
+        sub { $d->repositories },
+        'Docker::Registry::Exception::HTTP',
+        "A 400 error message is returned by the serice"
+    );
+    is($@->status, 400, ".. and has the status code of 400");
 }
 
-{
-  my $r = Docker::Registry::GCE->new(
-    region     => 'eu',
-    account_id => 'fake',
-    caller     => $io,
-    auth       => $auth,
-  );
-  cmp_ok($r->url, 'eq', 'https://eu.gcr.io');
-}
+
+use Data::Dumper;
+print Dumper($d);
 
 done_testing;

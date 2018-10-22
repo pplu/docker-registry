@@ -30,50 +30,26 @@ has jwt => (
     default => 'https://gitlab.com/jwt/auth',
 );
 
-has repo => (
-    is        => 'ro',
-    isa       => Str,
-    predicate => 'has_repo',
-);
-
-has bearer_token => (
-    is       => 'ro',
-    isa      => Str,
-    lazy     => 1,
-    builder => 'get_bearer_token',
-);
-
-sub scope {
-    my $self = shift;
-
-    if ($self->has_repo) {
-        return sprintf("repository:%s:pull,push", $self->repo);
-    }
-    else {
-        return 'registry:catalog:*';
-    }
-}
-
-sub token_uri {
-    my $self = shift;
+sub _build_token_uri {
+    my ($self, $scope) = @_;
 
     my $uri = $self->jwt->clone;
 
-    $uri->query_form(
+    $uri->query_form({
         service       => 'container_registry',
-        scope         => $self->scope,
+        scope         => $scope,
         client_id     => 'docker',
         offline_token => 'true',
-    );
+    });
 
     $uri->userinfo(join(':', $self->username, $self->access_token));
     return $uri;
 }
 
 sub get_bearer_token {
-    my $self = shift;
+    my ($self, $scope) = @_;
 
-    my $uri = $self->token_uri;
+    my $uri = $self->_build_token_uri($scope);
 
     my $ua = HTTP::Tiny->new();
     my $res = $ua->get($uri);
@@ -86,9 +62,11 @@ sub get_bearer_token {
 }
 
 sub authorize {
-    my ($self, $request) = @_;
+    my ($self, $request, $scope) = @_;
 
-    $request->header('Authorization', 'Bearer ' . $self->bearer_token);
+    my $bearer_token = $self->get_bearer_token($scope);
+
+    $request->header('Authorization', 'Bearer ' . $bearer_token);
     $request->header('Accept',
         'application/vnd.docker.distribution.manifest.v2+json');
 
