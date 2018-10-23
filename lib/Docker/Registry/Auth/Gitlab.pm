@@ -1,5 +1,6 @@
 package Docker::Registry::Auth::Gitlab;
-use Moose;
+use Moo;
+use Types::Standard qw/Str/;
 use namespace::autoclean;
 
 # ABSTRACT: Authentication module for gitlab registry
@@ -12,13 +13,13 @@ use JSON::MaybeXS qw(decode_json);
 
 has username => (
     is       => 'ro',
-    isa      => 'Str',
+    isa      => Str,
     required => 1,
 );
 
 has access_token => (
     is       => 'ro',
-    isa      => 'Str',
+    isa      => Str,
     required => 1,
 );
 

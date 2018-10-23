@@ -1,5 +1,5 @@
 package Docker::Registry::GCE;
-  use Moose;
+  use Moo;
   use Types::Standard qw/Str Maybe/;
   extends 'Docker::Registry::V2';
 

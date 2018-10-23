@@ -1,5 +1,5 @@
 package Docker::Registry::Auth::AzureServicePrincipal;
-  use Moose;
+  use Moo;
   with 'Docker::Registry::Auth';
   use JSON::MaybeXS;
 

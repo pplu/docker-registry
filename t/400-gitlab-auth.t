@@ -60,6 +60,17 @@ use Docker::Registry::Auth::Gitlab;
     $override->restore;
 }
 
+{
+    my $auth = Docker::Registry::Auth::Gitlab->new(
+        username     => 'foo',
+        access_token => 'bar',
+        repo => 'foobar',
+    );
+
+    my $jwt = $auth->jwt;
+    isa_ok($jwt, 'URI', "Got a JWT URI");
+}
+
 SKIP: {
 
     my $msg = "Live test, set GITLAB_USERNAME, GITLAB_TOKEN to run this"
