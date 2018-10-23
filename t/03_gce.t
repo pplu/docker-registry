@@ -1,7 +1,6 @@
 use strict;
 use warnings;
-use lib qw(t/lib);
-
+use Test::Lib;
 use Test::Docker::Registry;
 
 use Docker::Registry::GCE;

@@ -29,5 +29,6 @@ on test => sub {
   requires 'Sub::Override';
   requires 'Import::Into' => '1.002003';
   requires 'Test::Deep';
+  requires 'Test::Lib';
 };
 
