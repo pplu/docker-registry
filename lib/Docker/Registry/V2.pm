@@ -24,9 +24,10 @@ package Docker::Registry::Result::RepositoryTags;
 
 package Docker::Registry::V2;
   use Moo;
+  use Docker::Registry::Types qw(DockerRegistryURI);
   use Types::Standard qw/Str ConsumerOf/;
 
-  has url => (is => 'ro', isa => Str, required => 1);
+  has url => (is => 'ro', coerce => 1, isa => DockerRegistryURI, required => 1);
   has api_base => (is => 'ro', default => 'v2');
 
   has caller => (is => 'ro', isa => ConsumerOf['Docker::Registry::IO'], default => sub {
