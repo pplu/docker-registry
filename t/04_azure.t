@@ -51,7 +51,4 @@ cmp_ok($d->url, 'eq', 'https://azure-repo.azurecr.io');
 }
 
 
-use Data::Dumper;
-print Dumper($d);
-
 done_testing;
