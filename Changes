@@ -1,11 +1,11 @@
-0.06 2018-10-??
+0.06 2018-10-23
  - GCE receives a new attribute "region" to select the region where the registry
    is hosted.
  - New Azure Container Registry provider (ACR). Can authenticate with admin credentials
    or Azure AD credentials.
  - Internal refactor
    - using Moo and Types::Standard instead of Moose
-   - pass the scope to the singnature methdo in auth modules
+   - pass the scope to the signnature method in auth modules
 
 0.05 2018-06-04
  - Require Import::Into 1.002003 to avoid some installation failures on 
