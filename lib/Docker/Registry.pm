@@ -100,9 +100,13 @@ L<https://docs.docker.com/registry/spec/api/>
     CAPSiDE
     jlmartinez@capside.com
 
-=head1 Contributors
+=head1 CONTRIBUTORS
 
-Wesley Schwengle (waterkip) has implemented the GitLab provider, as well as refactored code
+Wesley Schwengle (waterkip) has implemented the GitLab provider, as well as
+refactored code
+
+For a full list of all the contributors see the CONTRIBUTORS file included in
+this module.
 
 =head1 BUGS and SOURCE
 
