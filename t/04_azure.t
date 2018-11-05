@@ -1,7 +1,6 @@
 use strict;
 use warnings;
-use lib qw(t/lib);
-
+use Test::Lib;
 use Test::Docker::Registry;
 
 use Docker::Registry::Azure;
@@ -50,8 +49,5 @@ cmp_ok($d->url, 'eq', 'https://azure-repo.azurecr.io');
     is($@->status, 400, ".. and has the status code of 400");
 }
 
-
-use Data::Dumper;
-print Dumper($d);
 
 done_testing;
