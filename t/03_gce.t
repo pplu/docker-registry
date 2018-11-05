@@ -35,6 +35,20 @@ my $d = Docker::Registry::GCE->new(
 }
 
 {
+    $io->set_content('<HTML><HEAD><meta http-equiv="content-type" content="text/html;charset=utf-8">
+<TITLE>302 Moved</TITLE></HEAD><BODY>
+<H1>302 Moved</H1>
+The document has moved
+<A HREF="https://console.cloud.google.com/m/gcr/images/redirect?project=infraestructura-global&amp;location=EU&amp;repo_name=v2/_catalog">here</A>.
+</BODY></HTML>');
+    $io->set_status_code(302);
+
+    throws_ok(sub {
+      $d->repositories;
+    }, 'Docker::Registry::Exception::HTTP');
+}
+
+{
   my $r = Docker::Registry::GCE->new(
     account_id => 'fake',
     caller     => $io,

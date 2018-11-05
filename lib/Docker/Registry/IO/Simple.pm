@@ -10,6 +10,7 @@ package Docker::Registry::IO::Simple;
 
   has ua => (is => 'ro', default => sub {
     HTTP::Tiny->new(
+      max_redirect => 0,
       agent => 'Docker::Registry Perl client' . $Docker::Registry::VERSION,
       timeout => 60,
     );
