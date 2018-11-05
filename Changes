@@ -7,7 +7,7 @@
    to random HTML (so the response processor was not making anything out of these responses)
  - Internal refactor
    - using Moo and Types::Standard instead of Moose
-   - pass the scope to the signnature method in auth modules
+   - pass the scope to the signature method in auth modules
 
 0.05 2018-06-04
  - Require Import::Into 1.002003 to avoid some installation failures on 
