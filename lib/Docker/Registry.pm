@@ -47,9 +47,9 @@ like (L<Docker::Registry::ECR>.
 
 =head2 auth
 
-An instance of an object that has the L<Docker::Registry::Auth> Role. See AUTHENTICATION for 
+An instance of an object that has the L<Docker::Registry::Auth> Role. See L</AUTHENTICATION> for
 a list of authentication types. Subclasses (like L<Docker::Registry::GCE>) will set a default
-authentication object appropiate for the specific provider. This is left injectable in the 
+authentication object appropriate for the specific provider. This is left injectable in the
 constructor so the programmer can force a specific auth provider.
 
 =head1 METHODS
