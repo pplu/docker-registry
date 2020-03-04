@@ -1,8 +1,8 @@
 package Docker::Registry::Call::Repositories;
   use Moo;
-  use Types::Standard qw/Int/;
+  use Types::Standard qw/Int Str/;
   has n => (is => 'ro', isa => Int);
-  has limit => (is => 'ro', isa => Int);
+  has last => (is => 'ro', isa => Str);
 
 package Docker::Registry::Result::Repositories;
   use Moo;
@@ -14,7 +14,7 @@ package Docker::Registry::Call::RepositoryTags;
   use Types::Standard qw/Int Str/;
   has repository => (is => 'ro', isa => Str, required => 1);
   has n => (is => 'ro', isa => Int);
-  has limit => (is => 'ro', isa => Int);
+  has last => (is => 'ro', isa => Str);
 
 package Docker::Registry::Result::RepositoryTags;
   use Moo;
@@ -90,7 +90,7 @@ package Docker::Registry::V2;
     my $call = $call_class->new({ @_ });
     my $params = { };
     $params->{ n } = $call->n if (defined $call->n);
-    $params->{ limit } = $call->limit if (defined $call->limit);
+    $params->{ last } = $call->last if (defined $call->last);
 
     my $request = $self->request_builder->build_request($call, $params);
 
@@ -114,7 +114,7 @@ package Docker::Registry::V2;
     my $params = { };
 
     $params->{ n } = $call->n if (defined $call->n);
-    $params->{ limit } = $call->limit if (defined $call->limit);
+    $params->{ last } = $call->last if (defined $call->last);
 
     my $request = $self->request_builder->build_request($call, $params);
 
