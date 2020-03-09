@@ -104,11 +104,8 @@ package Docker::Registry::V2;
     # }
     my $call_class = 'Docker::Registry::Call::Repositories';
     my $call = $call_class->new({ @_ });
-    my $params = { };
-    $params->{ n } = $call->n if (defined $call->n);
-    $params->{ last } = $call->last if (defined $call->last);
 
-    my $request = $self->request_builder->build_request($call, $params);
+    my $request = $self->request_builder->build_request($call);
 
     my $scope = 'registry:catalog:*';
     $request = $self->auth->authorize($request, $scope);
@@ -127,12 +124,8 @@ package Docker::Registry::V2;
     #{"name":"$repository","tags":["2017.09","latest"]}
     my $call_class = 'Docker::Registry::Call::RepositoryTags';
     my $call = $call_class->new({ @_ });
-    my $params = { };
 
-    $params->{ n } = $call->n if (defined $call->n);
-    $params->{ last } = $call->last if (defined $call->last);
-
-    my $request = $self->request_builder->build_request($call, $params);
+    my $request = $self->request_builder->build_request($call);
 
     my $scope = sprintf 'repository:%s:%s', $call->repository, 'pull';
     $request = $self->auth->authorize($request, $scope);
