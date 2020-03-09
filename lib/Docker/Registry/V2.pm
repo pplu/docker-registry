@@ -8,6 +8,7 @@ package Docker::Registry::Result::Repositories;
   use Moo;
   use Types::Standard qw/ArrayRef Str/;
   has repositories => (is => 'ro', isa => ArrayRef[Str]);
+  has last => (is => 'ro', isa => Str);
 
 package Docker::Registry::Call::RepositoryTags;
   use Moo;
@@ -21,6 +22,7 @@ package Docker::Registry::Result::RepositoryTags;
   use Types::Standard qw/ArrayRef Str/;
   has name => (is => 'ro', isa => Str, required => 1);
   has tags => (is => 'ro', isa => ArrayRef[Str], required => 1);
+  has last => (is => 'ro', isa => Str);
 
 package Docker::Registry::V2;
   use Moo;
@@ -59,7 +61,8 @@ package Docker::Registry::V2;
       if ($@) {
         Docker::Registry::Exception->throw({ message => $@ });
       }
-      return $struct;
+      my $pagination = $self->_parse_pagination_header($response);
+      return { %$struct, %$pagination };
     } elsif ($response->status == 401) {
       Docker::Registry::Exception::Unauthorized->throw({
         message => $response->content,
@@ -71,6 +74,19 @@ package Docker::Registry::V2;
         status  => $response->status
       });
     }
+  }
+
+  use URI;
+  sub _parse_pagination_header {
+    my ($self, $response) = @_;
+
+    return {}  unless($response->headers->{link});
+
+    my ($link) = ($response->headers->{link} =~ /<([^>]*)>/);
+    my $url = URI->new($link);
+    my %url_params = $url->query_form;
+
+    return {last => $url_params{last}};
   }
 
   sub repositories {
