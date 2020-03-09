@@ -12,15 +12,21 @@ package Docker::Registry::RequestBuilder;
     my $request;
 
     if (ref($call) eq 'Docker::Registry::Call::Repositories') {
+      my $url = join '/', $self->url, $self->api_base, '_catalog';
+      $url .= "?n=".$call->n  if($call->n);
+
       $request = Docker::Registry::Request->new(
         method => 'GET',
-        url => (join '/', $self->url, $self->api_base, '_catalog')
+        url => $url,
       );
 
     } elsif (ref($call) eq 'Docker::Registry::Call::RepositoryTags') {
+      my $url = join '/', $self->url, $self->api_base, $call->repository, 'tags/list';
+      $url .= "?n=".$call->n  if($call->n);
+
       $request = Docker::Registry::Request->new(
         method => 'GET',
-        url => (join '/', $self->url, $self->api_base, $call->repository, 'tags/list')
+        url => $url,
       );
     } else {
       Docker::Exception->throw(
