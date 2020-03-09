@@ -25,7 +25,7 @@ package Docker::Registry::Result::RepositoryTags;
 package Docker::Registry::V2;
   use Moo;
   use Docker::Registry::Types qw(DockerRegistryURI);
-  use Types::Standard qw/Str ConsumerOf/;
+  use Types::Standard qw/Str ConsumerOf InstanceOf/;
 
   has url => (is => 'ro', coerce => 1, isa => DockerRegistryURI, required => 1);
   has api_base => (is => 'ro', default => 'v2');
@@ -35,6 +35,11 @@ package Docker::Registry::V2;
     Docker::Registry::IO::Simple->new;  
   });
   has auth => (is => 'ro', isa => ConsumerOf['Docker::Registry::Auth'], lazy => 1, builder => 'build_auth' );
+  has request_builder => (is => 'ro', isa => InstanceOf['Docker::Registry::RequestBuilder'], lazy => 1, default => sub {
+      my $self = shift;
+      require Docker::Registry::RequestBuilder;
+      Docker::Registry::RequestBuilder->new(url => $self->url, api_base => $self->api_base);
+  });
 
   sub build_auth {
     require Docker::Registry::Auth::None;
@@ -87,11 +92,8 @@ package Docker::Registry::V2;
     $params->{ n } = $call->n if (defined $call->n);
     $params->{ limit } = $call->limit if (defined $call->limit);
 
-    my $request = Docker::Registry::Request->new(
-      parameters => $params,
-      method => 'GET',
-      url => (join '/', $self->url, $self->api_base, '_catalog')
-    );
+    my $request = $self->request_builder->build_request($call, $params);
+
     my $scope = 'registry:catalog:*';
     $request = $self->auth->authorize($request, $scope);
     my $response = $self->caller->send_request($request);
@@ -114,11 +116,8 @@ package Docker::Registry::V2;
     $params->{ n } = $call->n if (defined $call->n);
     $params->{ limit } = $call->limit if (defined $call->limit);
 
-    my $request = Docker::Registry::Request->new(
-      parameters => $params,
-      method => 'GET',
-      url => (join '/', $self->url, $self->api_base, $call->repository, 'tags/list')
-    );
+    my $request = $self->request_builder->build_request($call, $params);
+
     my $scope = sprintf 'repository:%s:%s', $call->repository, 'pull';
     $request = $self->auth->authorize($request, $scope);
     my $response = $self->caller->send_request($request);
